@@ -45,10 +45,10 @@ public class CrimsonScytheItem extends Item {
 
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState blockState, BlockPos pos, LivingEntity miner) {
-        if (!world.isClient && blockState.getHardness(world, pos) != 0.0f) {
+        if (!world.isClient() && blockState.getHardness(world, pos) != 0.0f) {
             stack.setDamage(stack.getDamage() + 1);
         }
-        
+
         if (miner instanceof PlayerEntity player && world instanceof ServerWorld serverWorld) {
             Box box = new Box(pos).expand(SWEEP_RADIUS, SWEEP_RADIUS, SWEEP_RADIUS);
             List<Entity> nearbyMobs = world.getOtherEntities(miner, box, entity ->
@@ -57,7 +57,7 @@ public class CrimsonScytheItem extends Item {
 
             for (Entity entity : nearbyMobs) {
                 if (entity instanceof LivingEntity livingEntity) {
-                    livingEntity.damage(serverWorld, DamageSource.melee(player), 3.0f);
+                    livingEntity.damage(serverWorld, player.getDamageSources().playerAttack(player), 3.0f);
                     miner.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.ABSORPTION,
                         ABSORPTION_DURATION,
