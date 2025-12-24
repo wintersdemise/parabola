@@ -9,7 +9,7 @@ public class ParabolaItems {
     public static final CrimsonScytheItem CRIMSON_SCYTHE = new CrimsonScytheItem();
 
     static {
-        Registry.register(Registries.ITEM, new Identifier("parabola", "crimson_scythe"), CRIMSON_SCYTHE);
+        Registry.register(Registries.ITEM, Identifier.of("parabola", "crimson_scythe"), CRIMSON_SCYTHE);
     }
 
     public static void initialize() {
