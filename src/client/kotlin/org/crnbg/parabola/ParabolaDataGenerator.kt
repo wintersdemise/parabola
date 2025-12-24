@@ -1,5 +1,6 @@
 package org.crnbg.parabola
 
+import net.fabricmc.fabric.api.client.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
@@ -22,7 +23,7 @@ object ParabolaDataGenerator : DataGeneratorEntrypoint {
         val pack = fabricDataGenerator.createPack()
 
         pack.addProvider { output ->
-            object : FabricModelProvider(output) {
+           object : FabricModelProvider(output as FabricDataOutput) {
                 override fun generateBlockStateModels(blockStateModelGenerator: BlockStateModelGenerator) {
                 }
 
@@ -33,31 +34,35 @@ object ParabolaDataGenerator : DataGeneratorEntrypoint {
         }
 
         pack.addProvider { output, registriesFuture ->
-            object : FabricRecipeProvider(output, registriesFuture) {
-                override fun getRecipeGenerator(
-                    registryLookup: RegistryWrapper.WrapperLookup,
-                    exporter: RecipeExporter,
-                ): RecipeGenerator {
-                    val recipeKey = RegistryKey.of(
-                        RegistryKeys.RECIPE,
-                        Identifier.of(output.modId, "crimson_scythe"),
-                    )
+           object : FabricRecipeProvider(output, registriesFuture) {
+               override fun getName(): String {
+                   return "Parabola Recipes"
+               }
 
-                    return object : RecipeGenerator(registryLookup, exporter) {
-                        override fun generate() {
-                            createShaped(RecipeCategory.COMBAT, ParabolaItems.CRIMSON_SCYTHE)
-                                .input('A', Items.NETHERITE_AXE)
-                                .input('S', Items.NETHERITE_SWORD)
-                                .pattern(" A")
-                                .pattern(" S")
-                                .pattern("S ")
-                                .criterion(hasItem(Items.NETHERITE_AXE), conditionsFromItem(Items.NETHERITE_AXE))
-                                .criterion(hasItem(Items.NETHERITE_SWORD), conditionsFromItem(Items.NETHERITE_SWORD))
-                                .offerTo(exporter, recipeKey)
-                        }
-                    }
-                }
-            }
+               override fun getRecipeGenerator(
+                   registryLookup: RegistryWrapper.WrapperLookup,
+                   exporter: RecipeExporter,
+               ): RecipeGenerator {
+                   val recipeKey = RegistryKey.of(
+                       RegistryKeys.RECIPE,
+                       Identifier.of(output.modId, "crimson_scythe"),
+                   )
+
+                   return object : RecipeGenerator(registryLookup, exporter) {
+                       override fun generate() {
+                           createShaped(RecipeCategory.COMBAT, ParabolaItems.CRIMSON_SCYTHE)
+                               .input('A', Items.NETHERITE_AXE)
+                               .input('S', Items.NETHERITE_SWORD)
+                               .pattern(" A")
+                               .pattern(" S")
+                               .pattern("S ")
+                               .criterion(hasItem(Items.NETHERITE_AXE), conditionsFromItem(Items.NETHERITE_AXE))
+                               .criterion(hasItem(Items.NETHERITE_SWORD), conditionsFromItem(Items.NETHERITE_SWORD))
+                               .offerTo(exporter, recipeKey)
+                       }
+                   }
+               }
+           }
         }
     }
 }

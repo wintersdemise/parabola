@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.EquipmentSlot
+import net.minecraft.particle.DragonBreathParticleEffect
 import net.minecraft.particle.ParticleTypes
 import org.crnbg.parabola.item.ParabolaItems
 import org.spongepowered.asm.mixin.Mixin
@@ -37,11 +38,7 @@ class CrimsonScytheParticleMixin {
                 val y = player.y + world.random.nextDouble() * 1.8
                 val z = player.z + (world.random.nextDouble() - 0.5) * 0.5
 
-                world.addParticle(
-                    ParticleTypes.DRAGON_BREATH,
-                    x, y, z,
-                    0.0, 0.0, 0.0
-                )
+                world.addParticle(DragonBreathParticleEffect(), x, y, z, 0.0, 0.0, 0.0)
             }
         }
     }
